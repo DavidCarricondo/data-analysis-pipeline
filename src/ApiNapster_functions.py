@@ -36,7 +36,7 @@ def artist_dict(artist):
         return None
     #Try the attributes that are not allways in an artist json
     try:
-        bio = BeautifulSoup(json1['artists'][0]['bios'][0]['bio']).text
+        bio = BeautifulSoup(json1['artists'][0]['bios'][0]['bio'], 'html.parser').text
     except:
         bio = None
     try:
