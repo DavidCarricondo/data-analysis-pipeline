@@ -55,7 +55,7 @@ def artist_dict(artist):
     except:
         bio = None
     try:
-        images: json1['artists'][0]['links']['images']['href']
+        images= json1['artists'][0]['links']['images']['href']
     except:
         images = None
     return {'bio' : bio,
