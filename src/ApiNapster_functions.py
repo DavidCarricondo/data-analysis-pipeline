@@ -53,7 +53,7 @@ def artist_dict(artist):
     try:
         genres = getName(json1['artists'][0]['links']['genres']['href'],'genres')
     except:
-        bio = None
+        genres = None
     try:
         images= json1['artists'][0]['links']['images']['href']
     except:
