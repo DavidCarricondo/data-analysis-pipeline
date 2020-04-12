@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+from ApiNapster_functions import cleanName
 
 df_song = pd.read_csv('../INPUT/song_data.csv')
 df_song_inf = pd.read_csv('../INPUT/song_info.csv') 
@@ -12,9 +13,7 @@ df_song_inf = df_song_inf.drop_duplicates(subset=['song_name','artist_name'])
 data = pd.merge(df_song,df_song_inf,on='song_name')
 
 #Create a new column with valid artists paths: (para función)
-data['artists_path']= data.artist_name.apply(lambda e: e.lower().replace(' ','-').replace('.','').replace('&','and')\
-               .replace('é','e').replace('ø','o').replace('\'','').replace('!','')\
-                   .replace('*','').replace('$','s'))
+data['artists_path']= data.artist_name.apply(cleanName)
                    
 #Getting results from import_napster:
 

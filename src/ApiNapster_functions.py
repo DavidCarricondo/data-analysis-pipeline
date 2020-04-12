@@ -4,6 +4,10 @@ import os
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 
+#Function to prepare the names as paths:
+cleanName= lambda e: e.lower().replace(' ','-').replace('.','').replace('&','and')\
+               .replace('é','e').replace('ø','o').replace('\'','').replace('!','')\
+                   .replace('*','').replace('$','s')
 
 #Prepare APIKEY:
 load_dotenv()

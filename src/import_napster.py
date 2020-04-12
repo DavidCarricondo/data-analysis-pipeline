@@ -11,10 +11,8 @@ df = pd.read_csv('../INPUT/song_info.csv', usecols=field)
 
     #Format the strings to introduce them in the path for the API request
 artists = list(df.artist_name.unique())
-artists_path= [e.lower().replace(' ','-').replace('.','').replace('&','and')\
-               .replace('é','e').replace('ø','o').replace('\'','').replace('!','')\
-                   .replace('*','').replace('$','s') for e in artists]
-artists_path = sorted(artists_path)
+
+artists_path = sorted(list(map(fn.cleanName,artists)))
 
 #create a dictionary with info of all the artists availble
 dictionary = {}
