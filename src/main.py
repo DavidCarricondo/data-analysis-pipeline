@@ -4,20 +4,25 @@ import matplotlib.pyplot as plt
 import requests
 from argparse import ArgumentParser
 import sys
+import main_functions as fn
 from ApiNapster_functions import cleanName
 
 parser = ArgumentParser(description="This program returns a report of the top song of your favorite band or the song of your choosing that has been on top")
 
 parser.add_argument("--band",help="which band to look for", default=None)
-parser.add_argument("--song", help="which song to analyze", default= 'top')
-parser.add_argument("--bygenre", help="which song to analyze", default= False, type=bool)
-parser.add_argument("--picture",help="do you want to see a picture of the band", default='no')
-band=sys.argv[2]
-bygenre=sys.argv[4]
+parser.add_argument("--bygenre", help="Do you want to analyze it by genre? True or False", default= 'no')
+
+try:
+    band=sys.argv[2]
+except: band=None
+try:
+    bygenre=sys.argv[4]
+except:
+    pass
 
 args = parser.parse_args()
 
-### Data:
+### Data:   
 data = pd.read_csv('../OUTPUT/data.csv')
 # read file
 with open('../OUTPUT/artists_json.json', 'r') as myfile:
@@ -35,113 +40,35 @@ if band==None:
     plt.hist(data.danceability, bins=20, color='c', edgecolor='k', alpha=0.65)
     plt.axvline(data.danceability.mean(), color='k', linestyle='dashed', linewidth=1)
     plt.show()
-elif bygenre==False:
-    if len(data[data.artists_path==cleanName(band)])==0:
-        print("Sorry, I don't seem to find that band :(")
-    else:
-        temp = data[data.artists_path==cleanName(band)]
-        print(band.upper())
-        print(dict_json[cleanName(band)]['bio'])
-        print('''
-    This is the most popular song of the band: 
-                ''')
-        print(temp[['artist_name', 'song_name','speechiness', 'danceability', 'fat_burning']][temp.song_popularity==temp.song_popularity.max()])
-        print('''
-    This are other songs that topped from this band: 
-                ''')
-        top = list(temp.song_name[temp.song_popularity==temp.song_popularity.max()])
-        for e in temp['song_name']: 
-            if e not in top: print(e) 
-
-
-
-        plt.hist(data.danceability, bins=20, color='c', edgecolor='k', alpha=0.65)
-        plt.title('How danceable is this song?')
-        plt.axvline(data.danceability.mean(), color='black', linestyle='dashed', linewidth=1)
-        plt.axvline(temp.danceability.mean(), color='blue', linestyle='dashed', linewidth=1)
-        plt.show()
-        plt.close()
-        plt.hist(data.speechiness, bins=20, color='c', edgecolor='k', alpha=0.65)
-        plt.title('How wordy is this song?')
-        plt.axvline(data.speechiness.mean(), color='black', linestyle='dashed', linewidth=1)
-        plt.axvline(temp.speechiness.mean(), color='blue', linestyle='dashed', linewidth=1)
-        plt.show()
-        plt.hist(data.fat_burning, bins=20, color='c', edgecolor='k', alpha=0.65)
-        plt.xlim(0,150)
-        plt.title('Can you burn those fats dancing to this song?')
-        plt.axvline(data.fat_burning.mean(), color='black', linestyle='dashed', linewidth=1)
-        plt.axvline(temp.fat_burning.mean(), color='blue', linestyle='dashed', linewidth=1)
-        plt.show()
-
-        lyric = ''
-        while lyric not in ['y', 'n']:
-            lyric = input('Do you want to see the lyrics of the song?(y/n): ')
-        if lyric == 'y':
-            url = 'https://api.lyrics.ovh/v1/'
-            tail = band.replace('-', ' ')+'/'+top[0].lower()
-            res = requests.get(url+tail)
-            if res.status_code==404:
-                print('Sorry, there are no lyrics available for that song')
-            else:
-                lyr = json.loads(res.text)
-                print(lyr['lyrics'])
 else:
-    if len(data[data.artists_path==cleanName(band)])==0:
-        print("Sorry, I don't seem to find that band :(")
-    else:
-        temp = data[data.artists_path==cleanName(band)]
-        genre = temp['genre'].iloc[0]
-        data_genre = data[data.genre==genre]
-        print(band.upper())
-        print(dict_json[cleanName(band)]['bio'])
-        print('''
-    This is the most popular song of the band: 
-                ''')
-        print(temp[['artist_name', 'song_name','speechiness', 'danceability', 'fat_burning']][temp.song_popularity==temp.song_popularity.max()])
-        print('''
-    This are other songs that topped from this band: 
-                ''')
-        top = list(temp.song_name[temp.song_popularity==temp.song_popularity.max()])
-        for e in temp['song_name']: 
-            if e not in top: print(e) 
-        print(f'''
-        This song belongs to the {genre.upper()} genre
-        ''')
-        print('''
-        This are the aggregated values per music genre. Where is your song?
-        ''')
-        print(data[['danceability', 'speechiness', 'fat_burning', 'genre']].groupby('genre').agg(['mean', 'max', 'min']))
+    try:
+        if bygenre=='yes':
+            if len(data[data.artists_path==cleanName(band)])==0:
+                print("Sorry, I don't seem to find that band :(")
+            else:
+                temp = data[data.artists_path==cleanName(band)]
+                print(fn.gen_report(temp=temp, data=data,band=band,dict=dict_json, genre=True))   
 
-        plt.hist(data_genre.danceability, bins=20, color='c', edgecolor='k', alpha=0.65)
-        plt.title('How danceable is this song?')
-        plt.axvline(data_genre.danceability.mean(), color='black', linestyle='dashed', linewidth=1)
-        plt.axvline(temp.danceability.mean(), color='blue', linestyle='dashed', linewidth=1)
-        plt.show()
-        plt.close()
-        plt.hist(data_genre.speechiness, bins=20, color='c', edgecolor='k', alpha=0.65)
-        plt.title('How wordy is this song?')
-        plt.axvline(data_genre.speechiness.mean(), color='black', linestyle='dashed', linewidth=1)
-        plt.axvline(temp.speechiness.mean(), color='blue', linestyle='dashed', linewidth=1)
-        plt.show()
-        plt.hist(data_genre.fat_burning, bins=20, color='c', edgecolor='k', alpha=0.65)
-        plt.xlim(0,150)
-        plt.title('Can you burn those fats dancing to this song?')
-        plt.axvline(data_genre.fat_burning.mean(), color='black', linestyle='dashed', linewidth=1)
-        plt.axvline(temp.fat_burning.mean(), color='blue', linestyle='dashed', linewidth=1)
-        plt.show()
+                lyric = ''
+                while lyric not in ['y', 'n']:
+                    lyric = input('Do you want to see the lyrics of the song?(y/n): ')
+                if lyric == 'y':
+                    song = top[0].lower().split('-')[0].strip()
+                    print(fn.getlyric(band, song))
+        else: raise Exception
 
-
-
-    lyric = ''
-    while lyric not in ['y', 'n']:
-        lyric = input('Do you want to see the lyrics of the song?(y/n): ')
-    if lyric == 'y':
-        url = 'https://api.lyrics.ovh/v1/'
-        song = top[0].lower().split('-')[0].strip()
-        tail = band.replace('-', ' ')+'/'+song
-        res = requests.get(url+tail)
-        if res.status_code==404:
-            print('Sorry, there are no lyrics available for that song')
+    except:
+        if len(data[data.artists_path==cleanName(band)])==0:
+            print("Sorry, I don't seem to find that band :(")
         else:
-            lyr = json.loads(res.text)
-            print(lyr['lyrics'])
+            temp = data[data.artists_path==cleanName(band)]
+            print(fn.gen_report(temp=temp, data=data,band=band,dict=dict_json, genre=False))
+
+            
+            lyric = ''
+            while lyric not in ['y', 'n']:
+                lyric = input('Do you want to see the lyrics of the song?(y/n): ')
+            if lyric == 'y':
+                song = top[0].lower().split('-')[0].strip()
+                print(fn.getlyric(band, song))
+
