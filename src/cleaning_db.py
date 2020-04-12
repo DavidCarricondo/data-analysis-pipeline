@@ -13,12 +13,20 @@ df_song_inf = df_song_inf.drop_duplicates(subset=['song_name','artist_name'])
 data = pd.merge(df_song,df_song_inf,on='song_name')
 
 #Create a new column with valid artists paths: (para función)
-data['artists_path']= data.artist_name.apply(cleanName)
-                   
+data['artists_path'] = data.artist_name.apply(cleanName)
+
+#Creating the variable 'fat burning'
+data.loc[:,'fat_burning'] = (data.song_duration_ms/data.song_duration_ms.quantile(.95))*100 * ((data.energy*0.5)+(data.danceability*0.5)) 
+
+#Getting rid of unnecesary columns
+keep = ['song_name','song_popularity', 'song_duration_ms', 'danceability','energy','speechiness','artist_name','album_names','artists_path','fat_burning']
+data = data[keep]
+
+
 #Getting results from import_napster:
 
 # read file
-with open('OUTPUT/artists_json.json', 'r') as myfile:
+with open('../OUTPUT/artists_json.json', 'r') as myfile:
     string=myfile.read()
 
 # parse file
