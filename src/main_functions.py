@@ -4,6 +4,15 @@ import requests
 import matplotlib.pyplot as plt
 from ApiNapster_functions import cleanName
 
+def general_report(data):
+    print('You chose no band, here is a report of all the songs:');print('')
+    print(f'The mean *speechiness* of a top song is {round(data.speechiness.mean(),2)} in a scale from 0 to 1')
+    print(f'The mean *danceability* of a top song is {round(data.danceability.mean(),2)} in a scale from 0 to 1')
+    print(f'The mean *fat_burning* of a top song is {round(data.fat_burning.mean(),2)}')
+    print(data[['speechiness','danceability', 'fat_burning']].describe(include='all'))
+    plt.hist(data.danceability, bins=20, color='c', edgecolor='k', alpha=0.65)
+    plt.axvline(data.danceability.mean(), color='k', linestyle='dashed', linewidth=1)
+    plt.show()
 
 def gen_report(temp, data,band, dict, genre=False):
     print(band.upper())
