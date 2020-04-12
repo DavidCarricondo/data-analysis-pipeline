@@ -57,7 +57,6 @@ else:
             temp = data[data.artists_path==cleanName(band)]
             print(fn.gen_report(temp=temp, data=data,band=band,dict=dict_json, genre=False))
 
-            
             lyric = ''
             while lyric not in ['y', 'n']:
                 lyric = input('Do you want to see the lyrics of the song?(y/n): ')
