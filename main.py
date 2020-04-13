@@ -23,9 +23,9 @@ except: bygenre = 'no'
 args = parser.parse_args()
 
 ### Data:   
-data = pd.read_csv('../OUTPUT/data.csv')
+data = pd.read_csv('OUTPUT/data.csv')
 # read file
-with open('../OUTPUT/artists_json.json', 'r') as myfile:
+with open('OUTPUT/artists_json.json', 'r') as myfile:
     string=myfile.read()
 string_json = json.loads(string)
 dict_json = json.loads(string_json)

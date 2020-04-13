@@ -2,8 +2,8 @@
 import json
 import requests
 import matplotlib.pyplot as plt
-from ApiNapster_functions import cleanName
-from wiki_scrapping import wiki_scrap
+from src.ApiNapster_functions import cleanName
+from src.wiki_scrapping import wiki_scrap
 
 def general_report(data):
     print('You chose no band, here is a report of all the songs:');print('')
