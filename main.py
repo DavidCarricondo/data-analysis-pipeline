@@ -7,11 +7,13 @@ import sys
 import os
 import src.main_functions as fn
 from src.ApiNapster_functions import cleanName
+from src.generate_pdf import create_pdf
 
 parser = ArgumentParser(description="This program returns a report of the top song of your favorite band or the song of your choosing that has been on top")
 
 parser.add_argument("--band",help="which band to look for", default=None)
 parser.add_argument("--bygenre", help="Do you want to analyze it by genre? yes/no", default= 'no')
+parser.add_argument("--pdf", help="Do you want to analyze it by genre? yes/no", default= 'no')
 
 try:
     band=sys.argv[2]
@@ -19,8 +21,10 @@ except: band=None
 try:
     bygenre=sys.argv[4]
 except: bygenre = 'no'
+try:
+    pdf=sys.argv[6]
+except: pdf = 'no'
     
-
 args = parser.parse_args()
 
 ### Data:   
@@ -30,7 +34,6 @@ with open('OUTPUT/artists_json.json', 'r') as myfile:
     string=myfile.read()
 string_json = json.loads(string)
 dict_json = json.loads(string_json)
-
 
 if band==None:
     fn.general_report(data=data)
@@ -49,8 +52,7 @@ else:
                 top = list(temp.song_name[temp.song_popularity==temp.song_popularity.max()])
                 song = top[0].lower().split('-')[0].strip()
                 print(fn.getlyric(band, song))
-
-    else:
+    elif bygenre=='no':
         if len(data[data.artists_path==cleanName(band)])==0:
             print("Sorry, I don't seem to find that band :(")
         else:
@@ -64,5 +66,5 @@ else:
                 top = list(temp.song_name[temp.song_popularity==temp.song_popularity.max()])
                 song = top[0].lower().split('-')[0].strip()
                 print(fn.getlyric(band, song))
-
+if pdf=='yes': create_pdf(band=band, data=data, dict=dict_json)   
 #os.remove('OUTPUT/temp.jpg')
