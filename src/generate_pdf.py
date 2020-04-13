@@ -1,8 +1,8 @@
 # importing libraries
 from fpdf import FPDF
-import requests
+import requests, json
 import pandas as pd
-import json
+from subprocess import Popen
 
 ### Data:   
 data = pd.read_csv('OUTPUT/data.csv')
@@ -93,4 +93,5 @@ def create_pdf(band, data, dict):
     lyr = json.loads(res.text)
     pdf.multi_cell(0,5,lyr['lyrics'],align= 'C', border=0, fill=False)
 
-    pdf.output("OUTPUT/sample_pdf.pdf","F")
+    pdf.output(f"OUTPUT/{band}.pdf","F")
+    Popen(['/bin/bash', '-c', f'xdg-open OUTPUT/{band}.pdf'])

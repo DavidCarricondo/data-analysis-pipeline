@@ -1,9 +1,8 @@
-#Functions to bring from main
-import json
-import requests
+import json, requests
 import matplotlib.pyplot as plt
 from src.ApiNapster_functions import cleanName
 from src.wiki_scrapping import wiki_scrap
+from src.generate_pdf import create_pdf
 
 def general_report(data):
     print('You chose no band, here is a report of all the songs:');print('')
@@ -48,7 +47,7 @@ This are other songs that topped from this band:
     col = ['danceability', 'speechiness', 'fat_burning']
     for c in col:    
         plt.hist(data[c], bins=20, color='c', edgecolor='k', alpha=0.65)
-        plt.title('How danceable is this song?')
+        plt.title(f'How {c} is this song?')
         plt.xlabel(f'{c} index') if genre==False else plt.xlabel(f'{c} index in {genre}')
         plt.axvline(data[c].mean(), color='black', linestyle='dashed', linewidth=1, label= 'General mean')
         plt.axvline(temp[c].mean(), color='blue', linestyle='dashed', linewidth=1, label=f'{band} mean')
@@ -56,7 +55,6 @@ This are other songs that topped from this band:
         plt.savefig(f'OUTPUT/{c}.png')
         plt.show()
     
-
 #Get the lyrics from a lyrics api https://lyricsovh.docs.apiary.io
 def getlyric(band, song):
     url = 'https://api.lyrics.ovh/v1/'
@@ -67,3 +65,38 @@ def getlyric(band, song):
     else:
         lyr = json.loads(res.text)
         return lyr['lyrics']
+
+def main_function(data, dict_json, band, bygenre, pdf):    
+    if band==None:
+        general_report(data=data)
+    else:
+        if bygenre=='yes':
+            if len(data[data.artists_path==cleanName(band)])==0:
+                print("Sorry, I don't seem to find that band :(")
+                return None
+            else:
+                temp = data[data.artists_path==cleanName(band)]
+                print(gen_report(temp=temp, data=data,band=band,dict=dict_json, genre=True))   
+
+                lyric = ''
+                while lyric not in ['y', 'n']:
+                    lyric = input('Do you want to see the lyrics of the song?(y/n): ')
+                if lyric == 'y':
+                    top = list(temp.song_name[temp.song_popularity==temp.song_popularity.max()])
+                    song = top[0].lower().split('-')[0].strip()
+                    print(getlyric(band, song))
+        elif bygenre=='no':
+            if len(data[data.artists_path==cleanName(band)])==0:
+                print("Sorry, I don't seem to find that band :(")
+            else:
+                temp = data[data.artists_path==cleanName(band)]
+                print(gen_report(temp=temp, data=data,band=band,dict=dict_json, genre=False))
+
+                lyric = ''
+                while lyric not in ['y', 'n']:
+                    lyric = input('Do you want to see the lyrics of the song?(y/n): ')
+                if lyric == 'y':
+                    top = list(temp.song_name[temp.song_popularity==temp.song_popularity.max()])
+                    song = top[0].lower().split('-')[0].strip()
+                    print(getlyric(band, song))
+    if pdf=='yes': create_pdf(band=band, data=data, dict=dict_json)  
