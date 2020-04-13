@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import urllib.request
-import os
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
@@ -15,8 +14,7 @@ def wiki_scrap(artist):
 
     #show image
     urlpic = 'https:'+src
-    urllib.request.urlretrieve(urlpic, 'temp.jpg')
-    img=mpimg.imread('temp.jpg')
+    urllib.request.urlretrieve(urlpic, 'OUTPUT/temp.jpg')
+    img=mpimg.imread('OUTPUT/temp.jpg')
     imgplot = plt.imshow(img)
     plt.show()
-    os.remove('temp.jpg')

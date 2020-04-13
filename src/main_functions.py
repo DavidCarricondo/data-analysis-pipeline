@@ -53,6 +53,7 @@ This are other songs that topped from this band:
         plt.axvline(data[c].mean(), color='black', linestyle='dashed', linewidth=1, label= 'General mean')
         plt.axvline(temp[c].mean(), color='blue', linestyle='dashed', linewidth=1, label=f'{band} mean')
         plt.legend()
+        plt.savefig(f'OUTPUT/{c}.png')
         plt.show()
     
 

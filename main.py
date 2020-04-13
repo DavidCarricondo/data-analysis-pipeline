@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import requests
 from argparse import ArgumentParser
 import sys
+import os
 import src.main_functions as fn
 from src.ApiNapster_functions import cleanName
 
@@ -64,3 +65,4 @@ else:
                 song = top[0].lower().split('-')[0].strip()
                 print(fn.getlyric(band, song))
 
+#os.remove('OUTPUT/temp.jpg')
