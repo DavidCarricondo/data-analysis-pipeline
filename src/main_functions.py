@@ -16,7 +16,8 @@ def general_report(data):
         plt.hist(data[c], bins=20, color='c', edgecolor='k', alpha=0.65)
         plt.title('How danceable is this song?')
         plt.xlabel(f'{c} index')
-        plt.axvline(data[c].mean(), color='black', linestyle='dashed', linewidth=1)
+        plt.axvline(data[c].mean(), color='black', linestyle='dashed', linewidth=1, label='Mean value')
+        plt.legend()
         plt.show()
 
 def gen_report(temp, data,band, dict, genre=False):
@@ -49,8 +50,9 @@ This are other songs that topped from this band:
         plt.hist(data[c], bins=20, color='c', edgecolor='k', alpha=0.65)
         plt.title('How danceable is this song?')
         plt.xlabel(f'{c} index') if genre==False else plt.xlabel(f'{c} index in {genre}')
-        plt.axvline(data[c].mean(), color='black', linestyle='dashed', linewidth=1)
-        plt.axvline(temp[c].mean(), color='blue', linestyle='dashed', linewidth=1)
+        plt.axvline(data[c].mean(), color='black', linestyle='dashed', linewidth=1, label= 'General mean')
+        plt.axvline(temp[c].mean(), color='blue', linestyle='dashed', linewidth=1, label=f'{band} mean')
+        plt.legend()
         plt.show()
     
 
