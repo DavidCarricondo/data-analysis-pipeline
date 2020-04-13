@@ -3,6 +3,7 @@ import json
 import requests
 import matplotlib.pyplot as plt
 from ApiNapster_functions import cleanName
+from wiki_scrapping import wiki_scrap
 
 def general_report(data):
     print('You chose no band, here is a report of all the songs:');print('')
@@ -10,13 +11,18 @@ def general_report(data):
     print(f'The mean *danceability* of a top song is {round(data.danceability.mean(),2)} in a scale from 0 to 1')
     print(f'The mean *fat_burning* of a top song is {round(data.fat_burning.mean(),2)}')
     print(data[['speechiness','danceability', 'fat_burning']].describe(include='all'))
-    plt.hist(data.danceability, bins=20, color='c', edgecolor='k', alpha=0.65)
-    plt.axvline(data.danceability.mean(), color='k', linestyle='dashed', linewidth=1)
-    plt.show()
+    col = ['danceability', 'speechiness', 'fat_burning']
+    for c in col:    
+        plt.hist(data[c], bins=20, color='c', edgecolor='k', alpha=0.65)
+        plt.title('How danceable is this song?')
+        plt.xlabel(f'{c} index')
+        plt.axvline(data[c].mean(), color='black', linestyle='dashed', linewidth=1)
+        plt.show()
 
 def gen_report(temp, data,band, dict, genre=False):
     print(band.upper())
     print(dict[cleanName(band)]['bio'])
+    wiki_scrap(artist=cleanName(band))
     print('''
 This is the most popular song of the band: 
             ''')
@@ -38,23 +44,15 @@ This are other songs that topped from this band:
         ''')
         print(data[['danceability', 'speechiness', 'fat_burning', 'genre']].groupby('genre').agg(['mean', 'max', 'min']))
         data = data[data.genre==genre]
-    plt.hist(data.danceability, bins=20, color='c', edgecolor='k', alpha=0.65)
-    plt.title('How danceable is this song?')
-    plt.axvline(data.danceability.mean(), color='black', linestyle='dashed', linewidth=1)
-    plt.axvline(temp.danceability.mean(), color='blue', linestyle='dashed', linewidth=1)
-    plt.show()
-    plt.close()
-    plt.hist(data.speechiness, bins=20, color='c', edgecolor='k', alpha=0.65)
-    plt.title('How wordy is this song?')
-    plt.axvline(data.speechiness.mean(), color='black', linestyle='dashed', linewidth=1)
-    plt.axvline(temp.speechiness.mean(), color='blue', linestyle='dashed', linewidth=1)
-    plt.show()
-    plt.hist(data.fat_burning, bins=20, color='c', edgecolor='k', alpha=0.65)
-    plt.xlim(0,150)
-    plt.title('Can you burn those fats dancing to this song?')
-    plt.axvline(data.fat_burning.mean(), color='black', linestyle='dashed', linewidth=1)
-    plt.axvline(temp.fat_burning.mean(), color='blue', linestyle='dashed', linewidth=1)
-    plt.show()
+    col = ['danceability', 'speechiness', 'fat_burning']
+    for c in col:    
+        plt.hist(data[c], bins=20, color='c', edgecolor='k', alpha=0.65)
+        plt.title('How danceable is this song?')
+        plt.xlabel(f'{c} index') if genre==False else plt.xlabel(f'{c} index in {genre}')
+        plt.axvline(data[c].mean(), color='black', linestyle='dashed', linewidth=1)
+        plt.axvline(temp[c].mean(), color='blue', linestyle='dashed', linewidth=1)
+        plt.show()
+    
 
 #Get the lyrics from a lyrics api https://lyricsovh.docs.apiary.io
 def getlyric(band, song):
