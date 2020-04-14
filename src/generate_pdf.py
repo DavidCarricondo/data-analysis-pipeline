@@ -35,19 +35,19 @@ def create_pdf(band, data, dict):
 
     # Top song cell
     song = list(temp.song_name[temp.song_popularity==temp.song_popularity.max()])[0]
-    danceability = list(temp.danceability[temp.song_popularity==temp.song_popularity.max()])[0]
-    speechiness = list(temp.speechiness[temp.song_popularity==temp.song_popularity.max()])[0]
-    fat_burning =list(temp.fat_burning[temp.song_popularity==temp.song_popularity.max()])[0]
+    danceability = round(list(temp.danceability[temp.song_popularity==temp.song_popularity.max()])[0],2)
+    speechiness = round(list(temp.speechiness[temp.song_popularity==temp.song_popularity.max()])[0],2)
+    fat_burning = round(list(temp.fat_burning[temp.song_popularity==temp.song_popularity.max()])[0],2)
 
-    pdf.set_xy(pdf.get_x()+5,pdf.get_y()+10)
+    pdf.set_xy(50,pdf.get_y()+5)
     pdf.set_font("Times", "B", 10)
-    pdf.cell(0,10,f'The most popular song of {band} is "{str(song)}"',0,1,"L")
-    pdf.set_x(pdf.get_x()+5)
-    pdf.cell(0,10,f'It has a danceability index of is {danceability}',0,1,"L")
-    pdf.set_x(pdf.get_x()+5)
-    pdf.cell(0,10,f'A speechiness of {speechiness}',0,1,"L")
-    pdf.set_x(pdf.get_x()+5)
-    pdf.cell(0,10,f'And the fat-burning indes is {fat_burning}',0,1,"L")  
+    pdf.cell(0,8,f'The most popular song of {band} is "{str(song)}"',0,1,"L")
+    pdf.set_x(50)
+    pdf.cell(0,8,f'The danceability of the top songs of this band is {danceability}',0,1,"L")
+    pdf.set_x(50)
+    pdf.cell(0,8,f'A speechiness of {speechiness}',0,1,"L")
+    pdf.set_x(50)
+    pdf.cell(0,8,f'And the fat-burning indes is {fat_burning}',0,1,"L")  
 
     pdf.add_page()
 
@@ -80,8 +80,8 @@ def create_pdf(band, data, dict):
     #Plots:
     pdf.set_font("Arial", "B", 14)
     pdf.cell(0,10,'Plots',0,1,"C")
-    pdf.image("OUTPUT/danceability.png", x = 5, y = 150, w = 90, h = 90)
-    pdf.image("OUTPUT/speechiness.png", x = 110, y = 150, w = 90, h = 90)
+    pdf.image("OUTPUT/danceability.png", x = 5, y = 140, w = 90, h = 90)
+    pdf.image("OUTPUT/speechiness.png", x = 110, y = 140, w = 90, h = 90)
     pdf.add_page()
     pdf.image("OUTPUT/fat_burning.png", x = 55, y = None, w = 90, h = 90)
 
