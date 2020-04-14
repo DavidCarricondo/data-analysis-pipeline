@@ -42,13 +42,10 @@ def create_pdf(band, data, dict):
     pdf.set_xy(pdf.get_x()+5,pdf.get_y()+10)
     pdf.set_font("Times", "B", 10)
     pdf.cell(0,10,f'The most popular song of {band} is "{str(song)}"',0,1,"L")
-    
     pdf.set_x(pdf.get_x()+5)
     pdf.cell(0,10,f'It has a danceability index of is {danceability}',0,1,"L")
-
     pdf.set_x(pdf.get_x()+5)
     pdf.cell(0,10,f'A speechiness of {speechiness}',0,1,"L")
-
     pdf.set_x(pdf.get_x()+5)
     pdf.cell(0,10,f'And the fat-burning indes is {fat_burning}',0,1,"L")  
 
@@ -66,12 +63,18 @@ def create_pdf(band, data, dict):
     for e in {a for a,b in agg.columns}:
         pdf.cell(cell_width_head,8,e.upper(),1,0,'C')
     pdf.ln()
+    pdf.cell(cell_width_head/2,8,'',1,0,'C')
+    cols = ['mean', 'max', 'min']
+    for i in range(3):
+        for e in cols:
+            pdf.cell(cell_width_head/3,8,e,1,0,'C')
+    pdf.ln()
     for e,r in agg.iterrows():
         pdf.set_font("Times", "B", 9)
-        pdf.cell(cell_width_head/2,10,e,1,0,'C')
+        pdf.cell(cell_width_head/2,8,e,1,0,'C')
         pdf.set_font("Times", "", 9)
         for i in r:
-            pdf.cell(cell_width_head/3,10,str(round(i,2)),1,0,'C')
+            pdf.cell(cell_width_head/3,8,str(round(i,2)),1,0,'C')
         pdf.ln()
 
     #Plots:

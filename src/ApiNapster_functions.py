@@ -37,31 +37,26 @@ def getName(url, type):
 def artist_dict(artist):
     json1 = getFromNapster(artist)
     #Some artists with non valid characters may be skipped
-    try:
+    if 'artists' in json1:
         if len(json1['artists'])==0:
             return None
-    except: return None
+    else: return None
     #Try the attributes in case they are not in the artist json
-    try:
+    if 'bios' in json1['artists'][0]:
         bio = BeautifulSoup(json1['artists'][0]['bios'][0]['bio'], 'html.parser').text
-    except:
-        bio = None
-    try:
+    else:    bio = None
+    if 'blurbs' in json1['artists'][0]:
         blurb = json1['artists'][0]['blurbs']
-    except:
-        blurb = None
-    try:
+    else: blurb = None
+    if 'contemporaries' in json1['artists'][0]['links']:
         similars = getName(json1['artists'][0]['links']['contemporaries']['href'],'artists')
-    except:
-        similars = None
-    try:
+    else: similars = None
+    if 'genres' in json1['artists'][0]['links']:
         genres = getName(json1['artists'][0]['links']['genres']['href'],'genres')
-    except:
-        genres = None
-    try:
+    else:   genres = None
+    if 'images' in json1['artists'][0]['links']:
         images= json1['artists'][0]['links']['images']['href']
-    except:
-        images = None
+    else:   images = None
     return {'bio' : bio,
             'blurb' : blurb,
             'similars' : similars,
