@@ -1,5 +1,6 @@
 # pipeline-project: Dancing to your band
 
+<img src="./INPUT/band.jpg" alt="band" title="band" width="2000" height="300"/>
 
 <p>&nbsp;&nbsp;&nbsp;&nbsp;Ironhack project on data pipelines that uses a kaggle data set enriched with data from two different APIS (with and without APIKEY) and from wikipedia scrapping.
 
@@ -11,11 +12,12 @@
 
 ### Flow
 
-&nbsp;&nbsp;&nbsp;&nbsp;There is a preprocess done by `cleaning_db.py` that imports bios and other data from the Napster API through `import_napster.py` and `ApiNapster_functons.py`(about 22000 requestes, more than three hours sending requests to the API :) )</p> During the call to the program there are two more live requests, for the lyrics, to to the API from *lyrics.ovh*, and for the image, via web scrapping in *wikipedia.org*. A pdf is generated from the funcion in `generate_pdf.py` and it is authomatically opened with `xdg-open *.pdf`.
+&nbsp;&nbsp;&nbsp;&nbsp;There is a preprocess done by `cleaning_db.py` that imports bios and other data from the Napster API through `import_napster.py` and `ApiNapster_functons.py`(about 22000 requestes, more than three hours sending requests to the API :) )</p> During the call to the program there are two more live requests, for the lyrics, to to the API from _lyrics.ovh_, and for the image, via web scrapping in _wikipedia.org_. A pdf is generated from the funcion in `generate_pdf.py` and it is authomatically opened with `xdg-open *.pdf`.
 
 ### Examples
 
 &nbsp;&nbsp;&nbsp;&nbsp; You might want to try some examples like:
+
 <p><code>python3 --band Pearl Jam --bygenre yes --pdf true</code></p>
 <p><code>python3 --band the 'rolling stones' --bygenre no --pdf true</code></p>
 <p><code>python3 --band 'eric clapton'</code></p>
