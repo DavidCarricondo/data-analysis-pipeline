@@ -4,13 +4,6 @@ import requests, json
 import pandas as pd
 from subprocess import Popen
 
-### Data:   
-data = pd.read_csv('OUTPUT/data.csv')
-# read file
-with open('OUTPUT/artists_json.json', 'r') as myfile:
-    string=myfile.read()
-string_json = json.loads(string)
-dict_json = json.loads(string_json)
 
 def create_pdf(band, data, dict):
     band=band.lower().replace(' ','-').replace('.','').replace('&','and').replace('é','e').replace('ø','o').replace('\'','').replace('!','')\
