@@ -37,10 +37,10 @@ This are other songs that topped from this band:
     if genre == True:
         genre = temp['genre'].iloc[0]
         print(f'''
-    This song belongs to the {genre.upper()} genre
+    This band belongs to the {genre.upper()} genre
         ''')
         print('''
-    This are the aggregated values per music genre. Where is your song?
+    This are the aggregated values per music genre. Where is your band?
         ''')
         print(data[['danceability', 'speechiness', 'fat_burning', 'genre']].groupby('genre').agg(['mean', 'max', 'min']))
         data = data[data.genre==genre]
