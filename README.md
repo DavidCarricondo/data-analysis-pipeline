@@ -1,6 +1,6 @@
 # pipeline-project: Dancing to your band
 
-<img src="./INPUT/band.jpg" alt="band" title="band" width="2000" height="300"/>
+<img src="./INPUT/band.png" alt="band" title="band" width="2000" height="200"/>
 
 <p>&nbsp;&nbsp;&nbsp;&nbsp;Ironhack project on data pipelines that uses a kaggle data set enriched with data from two different APIS (with and without APIKEY) and from wikipedia scrapping.
 
