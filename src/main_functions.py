@@ -70,7 +70,7 @@ def main_function(data, dict_json, band, bygenre, pdf):
     if band==None:
         general_report(data=data)
     else:
-        if bygenre=='yes':
+        if bygenre==True:
             if len(data[data.artists_path==cleanName(band)])==0:
                 print("Sorry, I don't seem to find that band :(")
                 return None
@@ -85,7 +85,7 @@ def main_function(data, dict_json, band, bygenre, pdf):
                     top = list(temp.song_name[temp.song_popularity==temp.song_popularity.max()])
                     song = top[0].lower().split('-')[0].strip()
                     print(getlyric(band, song))
-        elif bygenre=='no':
+        elif bygenre==False:
             if len(data[data.artists_path==cleanName(band)])==0:
                 print("Sorry, I don't seem to find that band :(")
             else:
@@ -99,4 +99,4 @@ def main_function(data, dict_json, band, bygenre, pdf):
                     top = list(temp.song_name[temp.song_popularity==temp.song_popularity.max()])
                     song = top[0].lower().split('-')[0].strip()
                     print(getlyric(band, song))
-    if pdf=='yes': create_pdf(band=band, data=data, dict=dict_json)  
+    if pdf==True: create_pdf(band=band, data=data, dict=dict_json)  
